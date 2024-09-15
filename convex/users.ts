@@ -12,6 +12,9 @@ export const viewer = query({
     if (user === null) {
       throw new Error("User was deleted");
     }
-    return user;
+    const teams = Promise.all(
+      (user?.teams ?? []).map((userId) => ctx.db.get(userId)),
+    );
+    return { ...user, teams: await teams };
   },
 });
