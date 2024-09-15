@@ -27,7 +27,7 @@ export default function SelectTeam({ user }: { user: any }) {
             <DropdownMenuLabel>My Teams</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {user?.teams.map((t: any) => (
-              <DropdownMenuItem onClick={() => setActiveTeam(t)} key={t.id}>
+              <DropdownMenuItem onClick={() => setActiveTeam(t)} key={t._id}>
                 {t.name}
               </DropdownMenuItem>
             ))}
