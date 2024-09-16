@@ -41,6 +41,7 @@ export default function Page() {
         sentiment: ai.data.sentiment,
         aiResponse: ai.data.aiResponse,
       });
+      setLoading(false);
       setRate(0);
       setDescription("");
       toast.success("Thanks for sharing your feedback!");

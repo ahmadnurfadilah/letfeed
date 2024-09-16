@@ -19,8 +19,6 @@ Output:
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const apiKey = process.env.OPENAI_API_KEY!;
-  console.log("apiKey", apiKey);
 
   try {
     // Classify Text
