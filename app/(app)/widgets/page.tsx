@@ -38,7 +38,6 @@ export default function Page() {
   const updateTeam = useMutation(api.teams.update);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const team = useTeam((state) => state.team);
-  const setTeam = useTeam((state) => state.setTeam);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -66,9 +65,7 @@ export default function Page() {
     toast.loading("Saving...");
 
     try {
-      await updateTeam({ id: team._id, name: team.name, description: team.description, style: values }).catch((error) => {
-        console.error("Failed to send message:", error);
-      });
+      await updateTeam({ id: team._id, name: team.name, description: team.description, style: values });
       toast.dismiss();
       toast.success("Saved successfully!");
     } catch (error) {
@@ -78,31 +75,6 @@ export default function Page() {
     }
 
     setIsSubmitting(false);
-
-    // fetch("/api/team/style", {
-    //   method: "POST",
-    //   body: JSON.stringify({teamId: team.id, style: values}),
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // })
-    //   .then((res) => res.json())
-    //   .then(async (res) => {
-    //     toast.dismiss();
-    //     if (res.success) {
-    //       toast.success("Saved successfully!");
-    //       setTeam(res.data);
-    //     } else {
-    //       toast.error(res.message);
-    //     }
-
-    //     setIsSubmitting(false);
-    //   })
-    //   .catch((err) => {
-    //     toast.dismiss();
-    //     toast.error(err.message);
-    //     setIsSubmitting(false);
-    //   });
   };
 
   return (
@@ -156,7 +128,7 @@ export default function Page() {
                     <FormField
                       control={form.control}
                       name="form_title"
-                      render={({ field }) => (
+                      render={({ field }: {field: any}) => (
                         <FormItem>
                           <FormLabel>Title</FormLabel>
                           <FormControl>
@@ -169,7 +141,7 @@ export default function Page() {
                     <FormField
                       control={form.control}
                       name="form_subtitle"
-                      render={({ field }) => (
+                      render={({ field }: {field: any}) => (
                         <FormItem>
                           <FormLabel>Subtitle</FormLabel>
                           <FormControl>
@@ -182,7 +154,7 @@ export default function Page() {
                     <FormField
                       control={form.control}
                       name="form_rate_text"
-                      render={({ field }) => (
+                      render={({ field }: {field: any}) => (
                         <FormItem>
                           <FormLabel>Rate Text</FormLabel>
                           <FormControl>
@@ -195,7 +167,7 @@ export default function Page() {
                     <FormField
                       control={form.control}
                       name="form_details_text"
-                      render={({ field }) => (
+                      render={({ field }: {field: any}) => (
                         <FormItem>
                           <FormLabel>Details Text</FormLabel>
                           <FormControl>
@@ -208,7 +180,7 @@ export default function Page() {
                     <FormField
                       control={form.control}
                       name="form_button_text"
-                      render={({ field }) => (
+                      render={({ field }: {field: any}) => (
                         <FormItem>
                           <FormLabel>Button Text</FormLabel>
                           <FormControl>
@@ -251,7 +223,7 @@ export default function Page() {
                     <FormField
                       control={form.control}
                       name="button_text"
-                      render={({ field }) => (
+                      render={({ field }: {field: any}) => (
                         <FormItem>
                           <FormLabel>Text</FormLabel>
                           <FormControl>
@@ -264,7 +236,7 @@ export default function Page() {
                     <FormField
                       control={form.control}
                       name="button_position"
-                      render={({ field }) => (
+                      render={({ field }: {field: any}) => (
                         <FormItem>
                           <FormLabel>Position</FormLabel>
                           <FormControl>
@@ -370,7 +342,6 @@ export default function Page() {
 
                         <Button
                           type="button"
-                          variant="brand"
                           className="w-full disabled:contrast-75 disabled:cursor-not-allowed"
                           style={{ background: form.watch("form_bg"), color: form.watch("form_color") }}
                         >
