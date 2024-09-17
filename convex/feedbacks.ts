@@ -120,3 +120,28 @@ export const fetchResults = internalQuery({
     return out;
   },
 });
+
+
+export const getFeedbackBySentiment = internalQuery({
+  args: {
+    sentiment: v.string(),
+  },
+  handler: async (ctx, args) => {
+    let feedbacks;
+
+    if (args.sentiment === "all") {
+      feedbacks = await ctx.db
+        .query("feedbacks")
+        .order("asc")
+        .collect();
+    } else {
+      feedbacks = await ctx.db
+        .query("feedbacks")
+        .filter((q) => q.eq(q.field("sentiment"), args.sentiment))
+        .order("asc")
+        .collect();
+    }
+
+    return feedbacks;
+  },
+});

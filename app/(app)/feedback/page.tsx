@@ -5,6 +5,7 @@ import Link from "next/link";
 import moment from "moment";
 import { PackageOpen, SmilePlus, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import SummaryFeedback from "./summary-feedback";
 
 export default async function Feedback() {
   const user = await fetchQuery(
@@ -23,6 +24,7 @@ export default async function Feedback() {
     <>
       <div className="flex items-center justify-between mb-4">
         <h1 className="font-bold text-xl">Feedback</h1>
+        <SummaryFeedback />
       </div>
 
       {feedbacks.length > 0 ? (

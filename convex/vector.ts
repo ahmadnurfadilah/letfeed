@@ -3,6 +3,7 @@
 import { action } from "./_generated/server";
 import { v } from "convex/values";
 import { internal } from "./_generated/api";
+import { ChatOpenAI } from "@langchain/openai";
 
 export const similarFeedbacks = action({
   args: { embedding: v.array(v.float64()) },
@@ -16,6 +17,23 @@ export const similarFeedbacks = action({
       results,
     });
     return rows;
+  },
+});
+
+export const summarizeFeedback = action({
+  args: { sentiment: v.string() },
+  handler: async (ctx, { sentiment }) => {
+    const rows: any = await ctx.runQuery(internal.feedbacks.getFeedbackBySentiment, {
+      sentiment: sentiment,
+    });
+
+    const feedbacks = rows.map((i: any) => "- " + i.description);
+    const model = new ChatOpenAI({
+      model: "gpt-4o-mini",
+      temperature: 0.5,
+    });
+    const res = await model.invoke(`The following is a list of feedback from customers for my business. Help me to create a summary in one to two sentences. And then give the conclusion of the summary:${feedbacks.join("\n")}`);
+    return res.content;
   },
 });
 
