@@ -40,7 +40,7 @@ export default function Sidenav({user}: {user: any}) {
             <Link
               href="/dashboard"
               className={`w-full text-sm text-white flex items-center space-x-2 px-4 py-3 rounded-md ${
-                pathname === "/dashboard" ? "bg-gradient-to-r from-perfume to-perfume-200 text-brand" : "text-white/70 hover:text-white"
+                pathname === "/dashboard" ? "bg-gradient-to-r from-perfume-400 to-perfume text-brand" : "text-white/70 hover:text-white"
               }`}
             >
               <LayoutDashboard className="w-4 h-4" />
@@ -51,7 +51,7 @@ export default function Sidenav({user}: {user: any}) {
             <Link
               href="/feedback"
               className={`w-full text-sm text-white flex items-center space-x-2 px-4 py-3 rounded-md ${
-                pathname === "/feedback" ? "bg-gradient-to-r from-perfume to-perfume-200 text-brand" : "text-white/70 hover:text-white"
+                pathname === "/feedback" ? "bg-gradient-to-r from-perfume-400 to-perfume text-brand" : "text-white/70 hover:text-white"
               }`}
             >
               <MessageSquareDashed className="w-4 h-4" />
@@ -62,7 +62,7 @@ export default function Sidenav({user}: {user: any}) {
             <Link
               href="/analysis"
               className={`w-full text-sm text-white flex items-center space-x-2 px-4 py-3 rounded-md ${
-                pathname === "/analysis" ? "bg-gradient-to-r from-perfume to-perfume-200 text-brand" : "text-white/70 hover:text-white"
+                pathname === "/analysis" ? "bg-gradient-to-r from-perfume-400 to-perfume text-brand" : "text-white/70 hover:text-white"
               }`}
             >
               <BotMessageSquare className="w-4 h-4" />
@@ -73,7 +73,7 @@ export default function Sidenav({user}: {user: any}) {
             <Link
               href="/customers"
               className={`w-full text-sm text-white flex items-center space-x-2 px-4 py-3 rounded-md ${
-                pathname === "/customers" ? "bg-gradient-to-r from-perfume to-perfume-200 text-brand" : "text-white/70 hover:text-white"
+                pathname === "/customers" ? "bg-gradient-to-r from-perfume-400 to-perfume text-brand" : "text-white/70 hover:text-white"
               }`}
             >
               <Users2 className="w-4 h-4" />
@@ -84,7 +84,7 @@ export default function Sidenav({user}: {user: any}) {
             <Link
               href="/widgets"
               className={`w-full text-sm text-white flex items-center space-x-2 px-4 py-3 rounded-md ${
-                pathname === "/widgets" ? "bg-gradient-to-r from-perfume to-perfume-200 text-brand" : "text-white/70 hover:text-white"
+                pathname === "/widgets" ? "bg-gradient-to-r from-perfume-400 to-perfume text-brand" : "text-white/70 hover:text-white"
               }`}
             >
               <Palette className="w-4 h-4" />
@@ -95,7 +95,7 @@ export default function Sidenav({user}: {user: any}) {
             <Link
               href="/integrations"
               className={`w-full text-sm text-white flex items-center space-x-2 px-4 py-3 rounded-md ${
-                pathname === "/integrations" ? "bg-gradient-to-r from-perfume to-perfume-200 text-brand" : "text-white/70 hover:text-white"
+                pathname === "/integrations" ? "bg-gradient-to-r from-perfume-400 to-perfume text-brand" : "text-white/70 hover:text-white"
               }`}
             >
               <Link2 className="w-4 h-4" />

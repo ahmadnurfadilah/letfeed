@@ -121,7 +121,6 @@ export const fetchResults = internalQuery({
   },
 });
 
-
 export const getFeedbackBySentiment = internalQuery({
   args: {
     teamId: v.id("teams"),
@@ -139,11 +138,122 @@ export const getFeedbackBySentiment = internalQuery({
     } else {
       feedbacks = await ctx.db
         .query("feedbacks")
-        .filter((q) => q.and(q.eq(q.field("teamId"), args.teamId), q.eq(q.field("sentiment"), args.sentiment)))
+        .filter((q) =>
+          q.and(
+            q.eq(q.field("teamId"), args.teamId),
+            q.eq(q.field("sentiment"), args.sentiment),
+          ),
+        )
         .order("asc")
         .collect();
     }
 
     return feedbacks;
+  },
+});
+
+export const getTopKeywordStats = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) {
+      throw new Error("Not signed in");
+    }
+
+    const user = await ctx.db.get(userId);
+    if (user === null) {
+      throw new Error("User was deleted");
+    }
+
+    const data = await ctx.db
+      .query("feedbackTags")
+      .filter((q) => q.eq(q.field("teamId"), user.currentTeamId))
+      .collect();
+
+    const keywords = data.map((o) => ({ value: o.name, count: o.total }));
+    return keywords;
+  },
+});
+
+export const getDashboardStats = query({
+  args: {},
+  handler: async (ctx) => {
+    const userId = await getAuthUserId(ctx);
+    if (userId === null) {
+      throw new Error("Not signed in");
+    }
+
+    const user = await ctx.db.get(userId);
+    if (user === null) {
+      throw new Error("User was deleted");
+    }
+
+    const feedbacks = await ctx.db
+      .query("feedbacks")
+      .filter((q) => q.eq(q.field("teamId"), user.currentTeamId))
+      .collect();
+
+    const feedbacksOpen = await ctx.db
+      .query("feedbacks")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("teamId"), user.currentTeamId),
+          q.eq(q.field("isResolved"), false),
+        ),
+      )
+      .collect();
+
+    const feedbacksResolved = await ctx.db
+      .query("feedbacks")
+      .filter((q) =>
+        q.and(
+          q.eq(q.field("teamId"), user.currentTeamId),
+          q.eq(q.field("isResolved"), true),
+        ),
+      )
+      .collect();
+
+    const ratingAverage =
+      feedbacks.reduce((acc, feedback) => {
+        return acc + feedback!.rate!;
+      }, 0) / feedbacks.length;
+
+    const sentimentCounts = feedbacks.reduce(
+      (acc, feedback) => {
+        if (feedback!.sentiment === "positive") acc.Positive++;
+        else if (feedback!.sentiment === "negative") acc.Negative++;
+        else if (feedback!.sentiment === "neutral") acc.Neutral++;
+        return acc;
+      },
+      { Positive: 0, Negative: 0, Neutral: 0 },
+    );
+
+    // Calculate sentiment percentages
+    const totalFeedbacks = feedbacks.length;
+    const sentiment = [
+      {
+        name: "positive",
+        count: sentimentCounts.Positive,
+        percentage: (sentimentCounts.Positive / totalFeedbacks) * 100,
+      },
+      {
+        name: "negative",
+        count: sentimentCounts.Negative,
+        percentage: (sentimentCounts.Negative / totalFeedbacks) * 100,
+      },
+      {
+        name: "neutral",
+        count: sentimentCounts.Neutral,
+        percentage: (sentimentCounts.Neutral / totalFeedbacks) * 100,
+      },
+    ];
+
+    return {
+      feedbacksAdded: feedbacks.length,
+      feedbacksOpen: feedbacksOpen.length,
+      feedbacksResolved: feedbacksResolved.length,
+      ratingAverage: ratingAverage,
+      sentiment: sentiment,
+    };
   },
 });
