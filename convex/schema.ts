@@ -15,6 +15,7 @@ export default defineSchema({
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
     teams: v.optional(v.array(v.id("teams"))),
+    currentTeamId: v.optional(v.id("teams")),
   }),
   messages: defineTable({
     userId: v.id("users"),

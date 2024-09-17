@@ -21,7 +21,6 @@ export default function Dashboard() {
   const [link, setLink] = useState("");
   const [snippet, setSnippet] = useState("");
   const team = useTeam((state) => state.team);
-  console.log(team);
 
   useEffect(() => {
     if (team) {
