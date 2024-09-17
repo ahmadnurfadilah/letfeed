@@ -124,6 +124,7 @@ export const fetchResults = internalQuery({
 
 export const getFeedbackBySentiment = internalQuery({
   args: {
+    teamId: v.id("teams"),
     sentiment: v.string(),
   },
   handler: async (ctx, args) => {
@@ -132,12 +133,13 @@ export const getFeedbackBySentiment = internalQuery({
     if (args.sentiment === "all") {
       feedbacks = await ctx.db
         .query("feedbacks")
+        .filter((q) => q.eq(q.field("teamId"), args.teamId))
         .order("asc")
         .collect();
     } else {
       feedbacks = await ctx.db
         .query("feedbacks")
-        .filter((q) => q.eq(q.field("sentiment"), args.sentiment))
+        .filter((q) => q.and(q.eq(q.field("teamId"), args.teamId), q.eq(q.field("sentiment"), args.sentiment)))
         .order("asc")
         .collect();
     }

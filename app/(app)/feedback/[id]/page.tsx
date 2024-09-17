@@ -21,6 +21,7 @@ export default function Page({ params }: { params: { id: string } }) {
     const getRelateds = async () => {
       const results = await vectorSearch({
         embedding: feedback!.embedding!,
+        teamId: feedback!.teamId!,
       });
       setRelateds(results);
     }

@@ -44,7 +44,7 @@ export default function SummaryFeedback() {
       (sentiment === "negative" && !summary.negative)
     ) {
       setSummarizing(true);
-      summarizeFeedback({ sentiment: sentiment })
+      summarizeFeedback({ sentiment: sentiment, teamId: team._id })
         .then((res) => {
           setSummarizing(false);
           setSummary({ ...summary, [sentiment]: res });

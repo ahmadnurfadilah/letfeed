@@ -74,7 +74,7 @@ export default defineSchema({
     .vectorIndex("by_embedding", {
       vectorField: "embedding",
       dimensions: 1536,
-      filterFields: ["description", "sentiment"],
+      filterFields: ["description", "sentiment", "teamId"],
     }),
   feedbackTags: defineTable({
     teamId: v.id("teams"),

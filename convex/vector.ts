@@ -6,12 +6,13 @@ import { internal } from "./_generated/api";
 import { ChatOpenAI } from "@langchain/openai";
 
 export const similarFeedbacks = action({
-  args: { embedding: v.array(v.float64()) },
-  handler: async (ctx, { embedding }) => {
+  args: { teamId: v.id("teams"), embedding: v.array(v.float64()) },
+  handler: async (ctx, { teamId, embedding }) => {
     let results;
     results = await ctx.vectorSearch("feedbacks", "by_embedding", {
       vector: embedding,
       limit: 6,
+      filter: (q) => q.eq("teamId", teamId),
     });
     const rows: any = await ctx.runQuery(internal.feedbacks.fetchResults, {
       results,
@@ -21,10 +22,11 @@ export const similarFeedbacks = action({
 });
 
 export const summarizeFeedback = action({
-  args: { sentiment: v.string() },
-  handler: async (ctx, { sentiment }) => {
+  args: { teamId: v.id("teams"), sentiment: v.string() },
+  handler: async (ctx, { teamId, sentiment }) => {
     const rows: any = await ctx.runQuery(internal.feedbacks.getFeedbackBySentiment, {
       sentiment: sentiment,
+      teamId: teamId,
     });
 
     const feedbacks = rows.map((i: any) => "- " + i.description);
@@ -34,6 +36,24 @@ export const summarizeFeedback = action({
     });
     const res = await model.invoke(`The following is a list of feedback from customers for my business. Help me to create a summary in one to two sentences. And then give the conclusion of the summary:${feedbacks.join("\n")}`);
     return res.content;
+  },
+});
+
+export const similarData = action({
+  args: { query: v.string(), teamId: v.id("teams") },
+  handler: async (ctx, { query, teamId }) => {
+    const embedding = await embed(query);
+
+    let results;
+    results = await ctx.vectorSearch("feedbacks", "by_embedding", {
+      vector: embedding,
+      limit: 10,
+      filter: (q) => q.eq("teamId", teamId),
+    });
+    const rows: any = await ctx.runQuery(internal.feedbacks.fetchResults, {
+      results,
+    });
+    return rows;
   },
 });
 
